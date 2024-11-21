@@ -1,19 +1,39 @@
 #include <stdio.h>
-#include <string.h>
 #include "main.h"
 #include "estudiante.h"
 
 void ejecutarPrograma(void) {
-    // Crear un estudiante de ejemplo
-    struct Estudiante estudiante1;
+    struct Estudiante estudiante;
+    int opcion;
 
-    // Asignar valores
-    strcpy(estudiante1.nombre, "Roberto Cárdenas");
-    estudiante1.edad = 18;
-    estudiante1.promedio = 8.5;
+    do {
+        printf("\n=== Menú Principal ===\n");
+        printf("1. Ingresar datos del estudiante\n");
+        printf("2. Mostrar datos del estudiante\n");
+        printf("3. Salir\n");
+        printf("Seleccione una opción: ");
 
-    // Mostrar los datos
-    mostrarEstudiante(estudiante1);
+        if (scanf("%d", &opcion) != 1) {
+            printf("Opción inválida. Intente nuevamente.\n");
+            limpiarBuffer();
+            continue;
+        }
+        limpiarBuffer();
+
+        switch (opcion) {
+            case 1:
+                ingresarDatosEstudiante(&estudiante);
+            break;
+            case 2:
+                mostrarEstudiante(estudiante);
+            break;
+            case 3:
+                printf("Saliendo del programa...\n");
+            break;
+            default:
+                printf("Opción inválida. Intente nuevamente.\n");
+        }
+    } while (opcion != 3);
 }
 
 int main() {
