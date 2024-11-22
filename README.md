@@ -347,7 +347,7 @@ int main() {
     fclose(archivo);
     return 0;
 }
-Conclusión:
+## Conclusión:
 
 Con base en tu experiencia y las implementaciones desarrolladas:
 
@@ -355,3 +355,4 @@ Con base en tu experiencia y las implementaciones desarrolladas:
 En nuestra opinión consideramos que es mejor el uso de C++ ya que sera mas facil para organizar el código,manejo de errores y disponibilidad de herramientas.
 Implementar estas prácticas de programación y utilizar herramientas adecuadas nos garantizará el éxito del proyecto.
 ¿Qué recomendaciones harías al equipo de desarrollo del CGEA para la siguiente fase del proyecto?
+Para la siguiente fase del proyecto del CGEA, recomiendo al equipo de desarrollo mantener una comunicación clara para evitar malentendidos, planificar bien las tareas y objetivos antes de empezar, revisar y probar el código regularmente para encontrar y corregir errores a tiempo, aprovechar cada oportunidad para aprender y mejorar sus habilidades, y fomentar un ambiente de colaboración y apoyo mutuo, ya que el éxito del proyecto depende del esfuerzo de todos.
