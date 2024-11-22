@@ -2,17 +2,20 @@
 #include <string.h>
 #include "estudiante.h"
 
+// Función para limpiar el buffer de entrada
 void limpiarBuffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
+// Función para ingresar los datos del estudiante
 void ingresarDatosEstudiante(struct Estudiante *est) {
     printf("\nIngrese los datos del estudiante\n");
     printf("Nombre: ");
     fgets(est->nombre, MAX_NOMBRE, stdin);
     est->nombre[strcspn(est->nombre, "\n")] = 0;
 
+    // Solicita la edad del estudiante y valida la entrada
     do {
         printf("Edad: ");
         if (scanf("%d", &est->edad) != 1 || est->edad <= 0) {
@@ -23,6 +26,7 @@ void ingresarDatosEstudiante(struct Estudiante *est) {
         }
     } while (1);
 
+    // Solicita el promedio del estudiante y valida la entrada
     do {
         printf("Promedio: ");
         if (scanf("%f", &est->promedio) != 1 || est->promedio < 0 || est->promedio > 10) {
@@ -40,6 +44,7 @@ void ingresarDatosEstudiante(struct Estudiante *est) {
     ingresarMaterias(est);
 }
 
+// Función para ingresar las materias del estudiante
 void ingresarMaterias(struct Estudiante *est) {
     char respuesta;
 
@@ -84,6 +89,7 @@ void ingresarMaterias(struct Estudiante *est) {
     printf("\nSe han registrado %d materias.\n", est->num_materias);
 }
 
+// Función para mostrar los datos del estudiante
 void mostrarEstudiante(struct Estudiante est) {
     printf("\n=== Datos del estudiante ===\n");
     printf("Nombre: %s\n", est.nombre);
@@ -92,6 +98,7 @@ void mostrarEstudiante(struct Estudiante est) {
     mostrarMaterias(est);
 }
 
+// Función para mostrar las materias del estudiante
 void mostrarMaterias(struct Estudiante est) {
     printf("\n=== Materias cursadas (%d) ===\n", est.num_materias);
     if (est.num_materias == 0) {
@@ -103,3 +110,81 @@ void mostrarMaterias(struct Estudiante est) {
         printf("%d. %s\n", i + 1, est.materias[i]);
     }
 }
+
+// Función para registrar una asistencia
+void registrarAsistencia(struct Estudiante *est) {
+    if (est->num_asistencias >= MAX_ASISTENCIAS) {
+        printf("Ha alcanzado el límite máximo de asistencias (%d).\n", MAX_ASISTENCIAS);
+        return;
+    }
+
+    struct Asistencia *asistencia = &est->asistencias[est->num_asistencias];
+
+    printf("\nIngrese la materia: ");
+    fgets(asistencia->materia, MAX_NOMBRE_MATERIA, stdin);
+    asistencia->materia[strcspn(asistencia->materia, "\n")] = 0;
+
+    printf("Ingrese la fecha (DD/MM/AAAA): ");
+    fgets(asistencia->fecha, MAX_FECHA, stdin);
+    asistencia->fecha[strcspn(asistencia->fecha, "\n")] = 0;
+
+    int estado;
+    do {
+        printf("Ingrese el estado (0: Asistió, 1: Falta, 2: Tardanza): ");
+        if (scanf("%d", &estado) != 1 || estado < 0 || estado > 2) {
+            printf("Por favor, ingrese un estado válido.\n");
+            limpiarBuffer();
+        } else {
+            asistencia->estado = (EstadoAsistencia)estado;
+            break;
+        }
+    } while (1);
+
+    est->num_asistencias++;
+    limpiarBuffer();
+    printf("Asistencia registrada correctamente.\n");
+}
+
+// Función para mostrar todas las asistencias registradas
+void mostrarAsistencias(struct Estudiante est) {
+    printf("\n=== Asistencias registradas (%d) ===\n", est.num_asistencias);
+    if (est.num_asistencias == 0) {
+        printf("No hay asistencias registradas.\n");
+        return;
+    }
+
+    for (int i = 0; i < est.num_asistencias; i++) {
+        struct Asistencia asistencia = est.asistencias[i];
+        printf("Fecha: %s, Materia: %s, Estado: %s\n", asistencia.fecha, asistencia.materia, estadoToString(asistencia.estado));
+    }
+}
+
+// Función para mostrar el resumen de asistencias por materia
+void mostrarAsistenciasPorMateria(struct Estudiante est) {
+    printf("\n=== Resumen de asistencias por materia ===\n");
+    if (est.num_asistencias == 0) {
+        printf("No hay asistencias registradas.\n");
+        return;
+    }
+
+    for (int i = 0; i < est.num_materias; i++) {
+        printf("\nMateria: %s\n", est.materias[i]);
+        for (int j = 0; j < est.num_asistencias; j++) {
+            if (strcmp(est.asistencias[j].materia, est.materias[i]) == 0) {
+                printf("Fecha: %s, Estado: %s\n", est.asistencias[j].fecha, estadoToString(est.asistencias[j].estado));
+            }
+        }
+    }
+}
+
+// Función para convertir el estado de asistencia a cadena
+const char* estadoToString(EstadoAsistencia estado) {
+    switch (estado) {
+        case ASISTIO: return "Asistió";
+        case FALTA: return "Falta";
+        case TARDANZA: return "Tardanza";
+        default: return "Desconocido";
+    }
+}
+
+//Fuente en la que nos hemos apoyado: Copilot
