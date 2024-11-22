@@ -279,9 +279,79 @@ Demuestra su uso con bloques try, catch.
 C:
 
 Aunque C no tiene un sistema integrado de manejo de excepciones como C++, discute cómo podrías manejar errores y situaciones inesperadas en este lenguaje.
+RESPUESTA:
+En el lenguaje C, aunque no existe un sistema integrado de manejo de excepciones como en C++, se pueden utilizar varias técnicas para manejar errores y situaciones inesperadas.
+
+Valores de Retorno:
+
+Muchas funciones en C devuelven un valor que indica si la operación fue exitosa o si ocurrió un error. Por ejemplo, las funciones de la biblioteca estándar como fopen devuelven NULL si no pueden abrir un archivo.
+Puedes definir tus propios códigos de error y hacer que tus funciones los devuelvan. Luego, en el código que llama a estas funciones, puedes verificar estos valores de retorno y manejar los errores adecuadamente.
+int abrirArchivo(const char *nombreArchivo) {
+    FILE *archivo = fopen(nombreArchivo, "r");
+    if (archivo == NULL) {
+        return -1; // Código de error
+    }
+    // Operaciones con el archivo
+    fclose(archivo);
+    return 0; // Éxito
+}
+
+int main() {
+    if (abrirArchivo("datos.txt") != 0) {
+        printf("Error al abrir el archivo.\n");
+        return 1;
+    }
+    // Continuar con el programa
+    return 0;
+}
+
+Variables Globales de Error:
+
+Puedes usar una variable global para almacenar el estado de error. La biblioteca estándar de C utiliza errno para este propósito.
+Después de una operación que puede fallar, puedes verificar errno para determinar qué error ocurrió.
+#include <errno.h>
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    FILE *archivo = fopen("datos.txt", "r");
+    if (archivo == NULL) {
+        printf("Error al abrir el archivo: %s\n", strerror(errno));
+        return 1;
+    }
+    // Operaciones con el archivo
+    fclose(archivo);
+    return 0;
+}
+
+Macros y Funciones de Manejo de Errores:
+
+Puedes definir macros o funciones para simplificar el manejo de errores y hacer que el código sea más legible.
+Estas macros o funciones pueden imprimir mensajes de error, limpiar recursos y realizar otras tareas necesarias.
+#include <stdio.h>
+#include <stdlib.h>
+
+#define CHECK_ERROR(cond, msg) \
+    do { \
+        if (cond) { \
+            fprintf(stderr, "Error: %s\n", msg); \
+            exit(EXIT_FAILURE); \
+        } \
+    } while (0)
+
+int main() {
+    FILE *archivo = fopen("datos.txt", "r");
+    CHECK_ERROR(archivo == NULL, "No se pudo abrir el archivo");
+
+    // Operaciones con el archivo
+    fclose(archivo);
+    return 0;
+}
 Conclusión:
 
 Con base en tu experiencia y las implementaciones desarrolladas:
 
 ¿Cuál de los dos lenguajes consideras más adecuado para el proyecto del CGEA?
+En nuestra opinión consideramos que es mejor el uso de C++ ya que sera mas facil para organizar el código,manejo de errores y disponibilidad de herramientas.
+Implementar estas prácticas de programación y utilizar herramientas adecuadas nos garantizará el éxito del proyecto.
 ¿Qué recomendaciones harías al equipo de desarrollo del CGEA para la siguiente fase del proyecto?
